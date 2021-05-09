@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
-import { ReimbursementsService } from './reimbursements.service';
+import { ReimbursementsService } from './reimbursement.service';
 import { CreateReimbursementDto } from './DTO/create-reimbursement.dto';
 import { ReimbursementStatusValidationPipe } from './pipes/reimbursement-status-validtaion.pipe';
 import { Reimbursement } from './reimbursement.entity';
@@ -35,7 +35,7 @@ export class ReimbursementsController{
     @Patch('/:id/status')
     async updateReimbursementStatus(
         @Param('id', ParseIntPipe) id: number,
-        @Body('status', ReimbursementReimbursementValidationPipe) status: ReimbursementStatus
+        @Body('status', ReimbursementStatusValidationPipe) status: ReimbursementStatus
     ): Promise<Reimbursement> {
         return await this.reimbursementService.updateReimbursementStatus(id, status);
      }
@@ -47,23 +47,21 @@ export class ReimbursementsController{
 
     }
 
-    @Post()
-    testOCR(){
-
-    }
-
-    async function testOCR(cuit,ticket){
+    @Post('/url')
+    async testOCR(@Body () ticketUrl: String){
         // Creates a client
         const client = new vision.ImageAnnotatorClient({
-            keyFilename: 'apiKey.json'
+            keyFilename: './src/reimbursements/api.json'
         });
-        const fileName = ticketList[ticket];
+        const fileName = './src/reimbursements/images/ticket.png';
+        console.log(ticketUrl);
         // Performs text detection on the local file
         const [result] = await client.textDetection(fileName);
         const detections = result.textAnnotations;
         //detections.forEach(text => console.log(text));
-        return detections;
+        return detections[0].description;
     }
+
     
 
 }

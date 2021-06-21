@@ -1,13 +1,15 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ReimbursementsService } from './reimbursement.service';
 import { CreateReimbursementDto } from './DTO/create-reimbursement.dto';
 import { ReimbursementStatusValidationPipe } from './pipes/reimbursement-status-validtaion.pipe';
 import { Reimbursement } from './reimbursement.entity';
 import { ReimbursementStatus } from './reimbursement-status.enum';
+import { AuthGuard } from '@nestjs/passport';
 const vision = require('@google-cloud/vision');
 
 
 @Controller('Reimbursements')
+@UseGuards(AuthGuard())
 export class ReimbursementsController{ 
     constructor(private reimbursementService : ReimbursementsService) {}    
 

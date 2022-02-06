@@ -40,8 +40,13 @@ export class ReimbursementsService {
         return found;
     }
 
-    async createReimbursement(createReimbursementDto: CreateReimbursementDto): Promise <Reimbursement>{
-        return this.reimbursementRepository.createReimbursement(createReimbursementDto);
+    //service getAllReimbursements
+    async getAllReimbursements(): Promise<Reimbursement[]>{
+        return await this.reimbursementRepository.find();
+    }
+
+    async createReimbursement(createReimbursementDto: CreateReimbursementDto, filePath): Promise <Reimbursement>{
+        return this.reimbursementRepository.createReimbursement(createReimbursementDto, filePath);
     }
 
     async deleteReimbursement(id: number): Promise<DeleteResult>{

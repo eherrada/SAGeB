@@ -14,5 +14,8 @@ export class Reimbursement extends BaseEntity {
 
     @Column()
     status: ReimbursementStatus;
+
+    @Column()
+    filePath: string;
 }
  

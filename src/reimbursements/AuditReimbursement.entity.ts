@@ -15,4 +15,5 @@ export class AuditReimbursement extends BaseEntity {
 
     @Column()
     date: Date;
+    
 }

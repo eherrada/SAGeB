@@ -7,4 +7,7 @@ export class CreateReimbursementDto{
     @IsNotEmpty()
     description: string;
 
+    @IsNotEmpty()
+    userId: string;
+
 }

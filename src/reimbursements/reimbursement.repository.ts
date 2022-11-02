@@ -8,12 +8,13 @@ export class ReimbursementRepository extends Repository<Reimbursement>{
 
     async createReimbursement(createReimbursementDto: CreateReimbursementDto, filePath): Promise<Reimbursement>{
 
-        const {title, description} = createReimbursementDto;
+        const {title, description, userId} = createReimbursementDto;
         const reimbursement = new Reimbursement();
         reimbursement.title = title;
         reimbursement.description = description;
         reimbursement.filePath = filePath;
         reimbursement.status = ReimbursementStatus.OPEN;
+        reimbursement.userId = userId;
         await reimbursement.save();
         
         return reimbursement;

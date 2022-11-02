@@ -17,5 +17,8 @@ export class Reimbursement extends BaseEntity {
 
     @Column()
     filePath: string;
+
+    @Column()
+    userId: string;
 }
  

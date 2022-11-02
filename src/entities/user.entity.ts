@@ -14,4 +14,7 @@ export class User {
     
     @ManyToOne(type => Role, role => role.id)
     role: number;
+
+    @Column({unique: true})
+    cuit: string;
 }

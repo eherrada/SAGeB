@@ -5,28 +5,16 @@ import { ReimbursementStatusValidationPipe } from './pipes/reimbursement-status-
 import { Reimbursement } from './reimbursement.entity';
 import { ReimbursementStatus } from './reimbursement-status.enum';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable, of } from 'rxjs';
-import { fileURLToPath } from 'url';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import vision from '@google-cloud/vision';
+import { ReimbursementResponseDto } from './DTO/reimbursment-response.dto';
 
 
 @Controller('Reimbursements')
 @UseGuards(AuthGuard())
 export class ReimbursementsController{ 
     constructor(private reimbursementService : ReimbursementsService) {}    
-
-    // @Get()
-    // getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto): Task[]{
-    //     if(Object.keys(filterDto).length){
-    //         return this.taskService.getTasksWithFilter(filterDto);
-    //     } else {
-    //         return this.taskService.getAllTasks();
-    //     }
-    // }
-
-
 
     @Get('/:id')
     getReimbursementById(@Param('id', ParseIntPipe) id: number): Promise<Reimbursement>{
@@ -65,7 +53,7 @@ export class ReimbursementsController{
             }
         })
     }))
-    createReimbursement(@UploadedFile() file, @Body() createReimbursementDto : CreateReimbursementDto): Promise<Reimbursement> {
+    createReimbursement(@UploadedFile() file, @Body() createReimbursementDto : CreateReimbursementDto): Promise<ReimbursementResponseDto> {
         return this.reimbursementService.createReimbursement(createReimbursementDto, file.path);
     }
 
@@ -75,30 +63,12 @@ export class ReimbursementsController{
         const client = new vision.ImageAnnotatorClient({
             keyFilename: './src/reimbursements/api.json'
         });
-        //const fileName = './src/reimbursements/images/ticket.png';
-        const fileName = './uploads/invoices/5cb6974dc1a9cb655e3f9513a64fac15-ticket.jpg';
-        console.log(ticketUrl);
-        console.log(fileName);
+        const fileName = 'uploads/invoices/7b452f8652233576a3a6fd3e4f1c687b-5cb6974dc1a9cb655e3f9513a64fac15-ticket.jpg';
+        //const fileName = './uploads/invoices/7b452f8652233576a3a6fd3e4f1c687b-5cb6974dc1a9cb655e3f9513a64fac15-ticket.jpg';
         // Performs text detection on the local file
         const [result] = await client.textDetection(ticketUrl);
         const detections = result.textAnnotations;
-        //detections.forEach(text => console.log(text));
         return detections[0].description;
     }
 
 }
-
-
-    // @Post('/upload')
-    // @UseInterceptors(FileInterceptor('file', {
-    //     storage: diskStorage({
-    //         destination: './uploads/invoices',
-    //         filename: (req, file, cb) => {
-    //             const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-    //             return cb(null, `${randomName}-${file.originalname}`);
-    //         }
-    //     })
-    // }))
-    // uploadFile(@UploadedFile() file): Observable<Object> {
-    //     return of({imagePath: file.path}); 
-    // }
